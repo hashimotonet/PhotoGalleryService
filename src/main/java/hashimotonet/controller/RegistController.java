@@ -34,7 +34,7 @@ public class RegistController {
             // セッションが見つかった場合の処理
         	String email = (String)session.getAttribute("mailAddress");		 // メールアドレス
             String accountId = (String) session.getAttribute("accountId");  // アカウント名
-            
+            String password = (String) session.getAttribute("password");    // パスワード  
             log.info("Welcome back, " + accountId + "!");
             return "RegistComplete";
         } else {
