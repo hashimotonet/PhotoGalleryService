@@ -28,27 +28,36 @@ public class IndexController {
     public String index(Model model) {
     	String referer = request.getHeader("REFERER");
     	String param = request.getParameter("param");
+    	String sessionid = request.getParameter("sessionid");
     	String page = "";
 		log.info(referer);
 		log.info(param);
-		page = "index";
-		if (param != null) {
-			switch (param) {
-				case "register":
-					page = "Register";
-					break;
-				case "SignUp":
-					page = "SignUp";
-					break;
-				case "signin":
-					page = "SignIn";
-					break;	
-				default:
-					page = "display";
-					break;
+		
+		if (sessionid != null && !sessionid.equals("")) {
+			page = "Regist";
+		} else {
+			
+			page = "index";
+			if (param != null) {
+				switch (param) {
+					case "register":
+						page = "Register";
+						break;
+					case "SignUp":
+						page = "SignUp";
+						break;
+					case "signin":
+						page = "SignIn";
+						break;	
+					default:
+						page = "display";
+						break;
+				}
 			}
 		}
+
 		log.info("page=" + page);
-        return page;
+        
+		return page;
     }
 }

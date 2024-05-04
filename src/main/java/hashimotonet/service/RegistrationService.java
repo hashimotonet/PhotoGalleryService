@@ -1,21 +1,36 @@
 /**
- * 
+ *
  */
 package hashimotonet.service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.sql.SQLException;
+
 import org.springframework.stereotype.Service;
 
+import hashimotonet.dao.RegistDao;
+import hashimotonet.service.base.AbstractBaseService;
+
 /**
- * 
+ *
  */
 @Service
-public class RegistrationService {
+public class RegistrationService extends AbstractBaseService {
 
-	public boolean execute(String mail, String accountId, String password) {
-		boolean success = false;
-		
-		// TODO DAO の実装（新規作成系）
-		
-		return success;
-	}
+    public boolean execute(String accountId, String mail, String password) throws SQLException,
+                                                                                     ClassNotFoundException,
+                                                                                     IOException,
+                                                                                     URISyntaxException {
+        boolean success = false;
+        
+        // パスワードをエンコード
+        password = digestEncode(password);
+
+        // TODO DAO の実装（新規作成系）
+        RegistDao dao = new RegistDao();
+        success = dao.regist(accountId, mail, password);
+
+        return success;
+    }
 }

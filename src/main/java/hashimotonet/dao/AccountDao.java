@@ -35,8 +35,7 @@ public final class AccountDao extends AbstractBaseDao {
             throws SQLException{
         boolean result = false;
 
-        String sql = "select authority from account "
-                + " where identity=?";
+        String sql = "select authority from account where identity=?";
 
         Connection conn = super.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);

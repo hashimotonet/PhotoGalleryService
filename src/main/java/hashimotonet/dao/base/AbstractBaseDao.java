@@ -71,7 +71,7 @@ public abstract class AbstractBaseDao {
     public Connection getConnection()
             throws SQLException {
         // JDBC接続を取得
-    	System.out.println(url);
+        System.out.println(url);
         this.conn = DriverManager.getConnection(url, user, password);
 
         // 自動コミットモードはOFFにする
@@ -90,9 +90,9 @@ public abstract class AbstractBaseDao {
             throws SQLException {
 
         // 接続をコミットします
-    	if (null != this.conn) {
-    		this.conn.commit();
-    	}
+        if (null != this.conn) {
+            this.conn.commit();
+        }
 
     }
 
@@ -105,9 +105,9 @@ public abstract class AbstractBaseDao {
             throws SQLException {
 
         // 接続をロールバックします
-    	if (null != this.conn) {
-    		this.conn.rollback();
-    	}
+        if (null != this.conn) {
+            this.conn.rollback();
+        }
 
     }
 
@@ -120,9 +120,9 @@ public abstract class AbstractBaseDao {
             throws SQLException {
 
         // 接続をクローズします
-    	if (null != this.conn) {
-    		this.conn.close();
-    	}
+        if (null != this.conn) {
+            this.conn.close();
+        }
 
     }
 

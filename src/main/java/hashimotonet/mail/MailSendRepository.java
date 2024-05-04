@@ -42,7 +42,7 @@ public class MailSendRepository {
     public void sendRegistMail(String url, String toEmailAddress) {
     	
     	// TODO スタブ
-    	toEmailAddress = "develop.photogallery@gmail.com";
+    	// toEmailAddress = "develop.photogallery@gmail.com";
 
         // メール内容作成
         String content = mailContentFactory.create((MailTemplate) new MailTemplateImpl(url));
