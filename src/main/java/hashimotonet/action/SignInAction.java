@@ -11,56 +11,50 @@ import hashimotonet.dao.AccountDao;
 import hashimotonet.util.BaseUtil;
 
 /**
- * 
+ *
  * @author hashi
  *
  */
 public class SignInAction {
-	
-	public static final String STATUS = "status";
-	
-	public SignInAction() {
 
-	}
-	
-	public boolean execute(HttpServletRequest request, String id, String password) throws ClassNotFoundException, 
-																							 SQLException, 
-																							 IOException, 
-																							 URISyntaxException {
-		
-		boolean result = false;
-		int authority = 0;
-		HttpSession session = request.getSession(true);
-		
+    public static final String STATUS = "status";
+
+    public SignInAction() {
+
+    }
+
+    public boolean execute(HttpServletRequest request, String id, String password) throws ClassNotFoundException,
+                                                                                             SQLException,
+                                                                                             IOException,
+                                                                                             URISyntaxException {
+
+        boolean result = false;
+        int authority = 0;
+        HttpSession session = request.getSession(true);
+
         // 新規セッション／継続セッションのいずれかを判定
-//        if (session.isNew() == true) {
-            // IDが取得できた。
-            if (BaseUtil.isNotEmpty(id)) {
-                // ID でアカウントマスタを検索。
-                if(isAccountExists(id)) {
-                    // ID は存在したので、
-                    // ID とパスワードで、アカウントマスタを検索。
-                    authority = isAccountExists(id,password);
-                    // アカウントマスタの検索結果に、アカウント権限を取得する。
-                    if (authority != -1) {
-                        // ここまで例外が起きていないので、処理結果はtrue。
-                        result = true;
-                        session.setAttribute(STATUS, Boolean.TRUE);
-                    }
-                } else {
-                    // 新規ユーザであるので、登録処理を行う。
-                    createAccount(id, password);
+        if (BaseUtil.isNotEmpty(id)) {
+            // ID でアカウントマスタを検索。
+            if(isAccountExists(id)) {
+                // ID は存在したので、
+                // ID とパスワードで、アカウントマスタを検索。
+                authority = isAccountExists(id,password);
+                // アカウントマスタの検索結果に、アカウント権限を取得する。
+                if (authority != -1) {
+                    // ここまで例外が起きていないので、処理結果はtrue。
                     result = true;
                     session.setAttribute(STATUS, Boolean.TRUE);
                 }
+            } else {
+                // 新規ユーザであるので、登録処理を行う。
+                createAccount(id, password);
+                result = true;
+                session.setAttribute(STATUS, Boolean.TRUE);
             }
-//        } else {
-//        	// 継続セッションであるので、処理続行。ただし、セッションは破棄。
-//        	session.invalidate();
-//        }
+        }
 
         return result;
-	}
+    }
 
     /**
      * IDによる、アカウントマスタへの存在チェックを行います。

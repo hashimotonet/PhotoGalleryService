@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import hashimotonet.controller.base.ControllerBase;
 import hashimotonet.mail.MailSendRepository;
 import hashimotonet.model.UserAccount;
 import hashimotonet.service.SignUpService;
@@ -19,7 +20,7 @@ import hashimotonet.service.SignUpService;
 @Controller
 @SessionAttributes(types = {UserAccount.class}, names= {"userAccount"})
 @RequestMapping
-public class SignUpController {
+public class SignUpController implements ControllerBase {
 	
     Logger log = (Logger) LogManager.getLogger(SignUpController.class);
     
@@ -44,12 +45,12 @@ public class SignUpController {
 	@PostMapping("/SignUp")
 	public String signUp(@ModelAttribute UserAccount userAccount, HttpSession session) {
 		String email = request.getParameter("email");
-		String accountId =request.getParameter("id");
+		String accountId =request.getParameter("accountId");
 	    String password = request.getParameter("password");
 	    
-	    session.setAttribute(RegistController.ADDRESS, email);
-	    session.setAttribute(RegistController.ACCOUNT_ID, accountId);
-	    session.setAttribute(RegistController.PASSWORD, password);
+	    session.setAttribute(ADDRESS, email);
+	    session.setAttribute(ACCOUNT_ID, accountId);
+	    session.setAttribute(PASSWORD, password);
 	    
 		String protocol = request.getProtocol();
 		String prefix = "http://";

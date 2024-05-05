@@ -53,13 +53,22 @@ td {
 	        </tr>
 	    </table>
 	</div>
-
-	<!--
+<script type="text/javascript">
+<!--
+function logout() {
+	document.frm.method = 'POST';
+	document.frm.action='SignOut';
+	document.frm.submit();
+	return;
+}
+-->
+</script>
 	<div align="center">
-		<form name="frm" method="post" action="SignIn">
+		<form name="frm" method="post" action="Photo">
 			<input type="hidden" name="id" th:value="${id}" />
 			<input type="hidden" name="password" th:value="${password}" />
-			<input type="button" class="btn btn-primary btn-sm" onClick=document.frm.submit(); value="back" />
+			<input type="button" class="btn btn-primary btn-sm" onClick=document.frm.submit(); value="Photo" /><br><br>
+			<input type="button" class="btn btn-primary btn-sm" onClick='logout();' value="logout" />
 		</form>	
 	</div>
 	-->

@@ -14,14 +14,16 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
+import hashimotonet.controller.base.ControllerBase;
 import hashimotonet.service.RegistrationService;
 
-@RestController
-public class RegistController {
+@Controller
+//@RestController
+public class RegistController implements ControllerBase {
 
     Logger log = LogManager.getLogger(RegistController.class);
 
@@ -33,21 +35,6 @@ public class RegistController {
 
     @Autowired
     HttpServletRequest request;
-
-    /**
-     * メールアドレス
-     */
-    public static final String ADDRESS = "mailAddress";
-
-    /**
-     * アカウント名
-     */
-    public static final String ACCOUNT_ID = "accountId";
-
-    /**
-     * パスワード
-     */
-    public static final String PASSWORD = "password";
 
     @GetMapping("/Regist")
     public String registEndpoint(@RequestParam("sessionid") String sessionId) throws ClassNotFoundException, SQLException, IOException, URISyntaxException {
