@@ -1,4 +1,4 @@
-package hashimotonet.dao.base;
+package hashimotonet.domain.dao.base;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

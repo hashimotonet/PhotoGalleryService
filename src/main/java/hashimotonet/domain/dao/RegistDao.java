@@ -1,7 +1,7 @@
 /**
  *
  */
-package hashimotonet.dao;
+package hashimotonet.domain.dao;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import hashimotonet.dao.base.AbstractBaseDao;
+import hashimotonet.domain.dao.base.AbstractBaseDao;
 
 /**
  * サインアップ画面からのユーザアカウント登録Daoクラス

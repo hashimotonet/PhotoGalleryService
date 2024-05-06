@@ -1,4 +1,4 @@
-package hashimotonet.dao;
+package hashimotonet.domain.dao;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import hashimotonet.dao.base.AbstractBaseDao;
+import hashimotonet.domain.dao.base.AbstractBaseDao;
 
 /**
  * Accountテーブルに対するDataAccessObjectです。

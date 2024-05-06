@@ -1,4 +1,4 @@
-package hashimotonet.dao;
+package hashimotonet.domain.dao;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,8 +13,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import hashimotonet.dao.base.AbstractBaseDao;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dao.base.AbstractBaseDao;
+import hashimotonet.domain.dto.Photo;
 
 /**
  * トランザクションテーブルである、PHOTO表に関する
