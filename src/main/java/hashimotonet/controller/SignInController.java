@@ -20,8 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hashimotonet.action.SignInAction;
+import hashimotonet.controller.base.ControllerBase;
+import hashimotonet.domain.dto.Account;
 import hashimotonet.handler.CustomHttpStatusRequestRejectedHandler;
-import hashimotonet.model.Account;
 
 /**
  * @author hashi
@@ -30,133 +31,139 @@ import hashimotonet.model.Account;
 @Controller
 @SessionAttributes(types = {Account.class}, names= {"account"})
 @RequestMapping("/")
-//@RequestMapping(path="/", method = RequestMethod.POST)
-public class SignInController {
-	
-    Logger log = (Logger) LogManager.getLogger(SignInController.class);
-    
-	@Autowired
-	HttpServletRequest request;
+public class SignInController implements ControllerBase {
 
-    
+    Logger log = (Logger) LogManager.getLogger(SignInController.class);
+
+    @Autowired
+    HttpServletRequest request;
+
+
     @Autowired
     HttpServletResponse response;
-    
+
     public SignInController() {
-    	super();
+        super();
     }
-    
+
     @ModelAttribute("account")
     public Account account() {
-    	return new Account();
+        return new Account();
     }
-    
-	@PostMapping("/SignIn")
-	public String index(@ModelAttribute Account account, HttpSession session) {
-		Integer counter = account.getLoginCount();
-		account.setLoginCount(counter++);
-		account.setUserId(session.getId());
-	 
-		SignInAction action = new SignInAction();
-		boolean success = false;
-		String name = request.getParameter("userName");
-		String password = request.getParameter("password");
-		
-		account.setId(name);
-		account.setPassword(password);
-		
-		session.setAttribute("account", account);
-	    
-		String referer = request.getHeader("REFERER");
-		
-		if (referer != null) {
-			if (referer.endsWith("ListImages")) {
-				success = true;
-			}
-		}
-		
-		if (false == success) {
 
-			try {
-				
-				success = action.execute(request, name, password);
-				
-			} catch(ClassNotFoundException | IOException | SQLException | URISyntaxException e) {
-				
-				log.catching(e);
-				
-			}
-		}
-	
-		if (success) {
-			
-			response.setStatus(HttpServletResponse.SC_OK);
+    @PostMapping("/SignIn")
+    public String index(@ModelAttribute Account account, HttpSession session) {
+        Integer counter = account.getLoginCount();
+        account.setLoginCount(counter++);
+        account.setUserId(session.getId());
 
-			return "photo";
-			
-		} else {
-			
-			account.setAuth("unauthorized");
+        SignInAction action = null;
+        try {
+            action = new SignInAction();
+        } catch (ClassNotFoundException | IOException | URISyntaxException e) {
+            log.catching(e);
+        }
+        boolean success = false;
+        String name = request.getParameter("userName");
+        String password = request.getParameter("password");
 
-			session.setAttribute("account", account);
-			
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        account.setId(name);
+        account.setPassword(password);
 
-			return "index";
-		}
-	      
-	  }
-      
-	  @Bean
-	  public RequestRejectedHandler requestRejectedHandler() {
+        session.setAttribute("account", account);
+
+        String referer = request.getHeader("REFERER");
+
+        if (referer != null) {
+            if (referer.endsWith("ListImages")) {
+                success = true;
+            }
+        }
+
+        if (false == success) {
+
+            try {
+
+                success = action.execute(request, name, password);
+
+            } catch(ClassNotFoundException | IOException | SQLException | URISyntaxException e) {
+
+                log.catching(e);
+
+            }
+        }
+
+        if (success && referer.endsWith("param=signin")) {
+        	request.getSession().setAttribute(ACCOUNT_ID, name);
+        	request.getSession().setAttribute(PASSWORD, password); // TODO 参照の際には digestPasswordにする必要あり
+
+            response.setStatus(HttpServletResponse.SC_OK);
+
+            return "photo";
+
+        } else {
+
+            account.setAuth("unauthorized");
+
+            session.setAttribute("account", account);
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            return null;
+        }
+
+      }
+
+      @Bean
+      public RequestRejectedHandler requestRejectedHandler() {
           return new CustomHttpStatusRequestRejectedHandler();
       }
-	
-	
-	  /*	@PostMapping
-		public String index(@RequestParam("userName") String id, @RequestParam("password") String password, Model model) {
-		 
-			SignInAction action = new SignInAction();
-			boolean success = false;
-			
-			model.addAttribute("id", id);
-			model.addAttribute("password", password);
-		    
-			String referer = request.getHeader("REFERER");
-			
-			if (referer.endsWith("ListImages")) {
-				success = true;
-			}
-			
-			if (false == success) {
 
-				try {
-					
-					success = action.execute(request, id, password);
-					
-				} catch(ClassNotFoundException | IOException | SQLException | URISyntaxException e) {
-					
-					log.catching(e);
-					
-				}
-			}
-		
-			if (success) {
-				
-				response.setStatus(HttpServletResponse.SC_OK);
 
-				return "photo";
-				
-			} else {
+      /*	@PostMapping
+        public String index(@RequestParam("userName") String id, @RequestParam("password") String password, Model model) {
 
-				model.addAttribute("auth", "unauthorized");
-				
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            SignInAction action = new SignInAction();
+            boolean success = false;
 
-				return "index";
-			}
-		      
-		  }
-	*/
+            model.addAttribute("id", id);
+            model.addAttribute("password", password);
+
+            String referer = request.getHeader("REFERER");
+
+            if (referer.endsWith("ListImages")) {
+                success = true;
+            }
+
+            if (false == success) {
+
+                try {
+
+                    success = action.execute(request, id, password);
+
+                } catch(ClassNotFoundException | IOException | SQLException | URISyntaxException e) {
+
+                    log.catching(e);
+
+                }
+            }
+
+            if (success) {
+
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                return "photo";
+
+            } else {
+
+                model.addAttribute("auth", "unauthorized");
+
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+                return "index";
+            }
+
+          }
+    */
 
 }

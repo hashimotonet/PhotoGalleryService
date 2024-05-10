@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hashimotonet.controller.base.ControllerBase;
+import hashimotonet.domain.dto.UserAccount;
 import hashimotonet.mail.MailSendRepository;
-import hashimotonet.model.UserAccount;
 import hashimotonet.service.SignUpService;
 
 @Controller

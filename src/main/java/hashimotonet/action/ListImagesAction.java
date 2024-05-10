@@ -21,8 +21,8 @@ import org.apache.logging.log4j.core.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hashimotonet.bean.URLHolder;
-import hashimotonet.dao.PhotoDao;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dao.PhotoDao;
+import hashimotonet.domain.dto.Photo;
 import hashimotonet.util.BaseUtil;
 import hashimotonet.util.FileProcessorUtil;
 

@@ -14,8 +14,8 @@ import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import hashimotonet.dao.PhotoDao;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dao.PhotoDao;
+import hashimotonet.domain.dto.Photo;
 
 @Component
 public class StartupImagesLoader {

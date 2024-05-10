@@ -49,7 +49,7 @@ public class RegistController implements ControllerBase {
             String accountId = (String) session.getAttribute(ACCOUNT_ID);  // アカウント名
             String password = (String) session.getAttribute(PASSWORD);     // パスワード
             
-            success = service.execute(email, accountId, password);
+            success = service.execute(accountId, email, password);
 
             log.info("Welcome, " + accountId + "!");
             

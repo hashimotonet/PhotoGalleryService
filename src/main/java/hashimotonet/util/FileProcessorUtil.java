@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import hashimotonet.bean.URLHolder;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dto.Photo;
 import hashimotonet.service.PhotoService;
 import hashimotonet.util.image.SquareFileCreator;
 import hashimotonet.util.image.ThumbnailCreator;

@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hashimotonet.bean.URLHolder;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dto.Photo;
 import hashimotonet.util.BaseUtil;
 import hashimotonet.util.FileProcessorUtil;
 

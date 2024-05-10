@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Service;
 
-import hashimotonet.dao.RegistDao;
+import hashimotonet.domain.dao.RegistDao;
 import hashimotonet.service.base.AbstractBaseService;
 
 /**

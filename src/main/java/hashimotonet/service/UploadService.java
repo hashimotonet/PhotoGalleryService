@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hashimotonet.bean.RequestBean;
-import hashimotonet.model.Photo;
+import hashimotonet.domain.dto.Photo;
 import hashimotonet.util.FileProcessorUtil;
 
 /**
@@ -65,6 +65,9 @@ public class UploadService {
         identity = identity.replace("%40", "@");
 
         log.info("identity = " + identity);
+        if (identity == null || identity.equals("")) {
+        	identity = (String) request.getSession().getAttribute("accountId");
+        }
 
         // Base64文字列をバイト配列に複合する。後にBLOBのDB格納値となる。
         byte[] data = decode2Bytes(base64);

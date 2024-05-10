@@ -35,11 +35,12 @@ public final class AccountDao extends AbstractBaseDao {
             throws SQLException{
         boolean result = false;
 
-        String sql = "select authority from account where identity=?";
+        String sql = "select id from user_account where account_id=? or email_address=?";
 
         Connection conn = super.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, identity);
+        stmt.setString(2, identity);
 
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
@@ -64,23 +65,25 @@ public final class AccountDao extends AbstractBaseDao {
             throws SQLException {
         int result = -1;
 
-        String sql = "select authority from account "
-                + " where identity=? and password=?";
+        String sql = "select AUTHORITY from USER_ACCOUNT "
+                + " where (ACCOUNT_ID=? or EMAIL_ADDRESS=?) and PASSWORD=?";
 
        Connection conn = super.getConnection();
        PreparedStatement stmt = conn.prepareStatement(sql);
 
        stmt.setString(1, identity);
-       stmt.setString(2, password);
+       stmt.setString(2, identity);
+       stmt.setString(3, password);
 
        ResultSet rs = stmt.executeQuery();
 
        if (rs.next()) {
-           result = rs.getInt("authority");
+           result = rs.getInt("AUTHORITY");
        }
 
        rs.close();
        stmt.close();
+       conn.close();
 
        return result;
     }

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hashimotonet.domain.dto.Photo;
 import hashimotonet.entity.PhotoEntity;
-import hashimotonet.model.Photo;
 import hashimotonet.repository.PhotoRepository;
 
 @Service

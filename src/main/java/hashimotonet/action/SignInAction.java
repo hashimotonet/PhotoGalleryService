@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import hashimotonet.dao.AccountDao;
+import hashimotonet.domain.dao.AccountDao;
+import hashimotonet.service.SignInService;
 import hashimotonet.util.BaseUtil;
 
 /**
@@ -19,8 +20,10 @@ public class SignInAction {
 
     public static final String STATUS = "status";
 
-    public SignInAction() {
+    SignInService service;
 
+    public SignInAction() throws ClassNotFoundException, IOException, URISyntaxException {
+    	this.service = new SignInService();
     }
 
     public boolean execute(HttpServletRequest request, String id, String password) throws ClassNotFoundException,
@@ -29,7 +32,6 @@ public class SignInAction {
                                                                                              URISyntaxException {
 
         boolean result = false;
-        int authority = 0;
         HttpSession session = request.getSession(true);
 
         // 新規セッション／継続セッションのいずれかを判定
@@ -38,16 +40,9 @@ public class SignInAction {
             if(isAccountExists(id)) {
                 // ID は存在したので、
                 // ID とパスワードで、アカウントマスタを検索。
-                authority = isAccountExists(id,password);
-                // アカウントマスタの検索結果に、アカウント権限を取得する。
-                if (authority != -1) {
-                    // ここまで例外が起きていないので、処理結果はtrue。
-                    result = true;
-                    session.setAttribute(STATUS, Boolean.TRUE);
-                }
-            } else {
-                // 新規ユーザであるので、登録処理を行う。
-                createAccount(id, password);
+            	result = service.execute(id, password);
+
+            	// ここまで例外が起きていないので、処理結果はtrue。
                 result = true;
                 session.setAttribute(STATUS, Boolean.TRUE);
             }
@@ -75,7 +70,7 @@ public class SignInAction {
 
         // IDによるアカウントマスタへの存在チェック。
         exists = dao.accuntExists(identity);
-
+        
         // JDBC接続を閉じる。
         dao.close();
 
