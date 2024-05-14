@@ -25,7 +25,7 @@ public class SignInService extends AbstractBaseService {
 	private Logger log = LogManager.getLogger(SignInService.class);
     
     UserAccountDao userAccountDao;
-    
+
     public SignInService() throws ClassNotFoundException, IOException, URISyntaxException {
 		super();
 		userAccountDao = new UserAccountDao();

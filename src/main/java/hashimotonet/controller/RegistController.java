@@ -37,7 +37,7 @@ public class RegistController implements ControllerBase {
     HttpServletRequest request;
 
     @GetMapping("/Regist")
-    public String registEndpoint(@RequestParam("sessionid") String sessionId) throws ClassNotFoundException, SQLException, IOException, URISyntaxException {
+    public String registEndpoint(@RequestParam("sessionid") String sessionId) {
         boolean success = false; 
     	
     	// SessionRepositoryを使用してセッションを取得
@@ -49,7 +49,11 @@ public class RegistController implements ControllerBase {
             String accountId = (String) session.getAttribute(ACCOUNT_ID);  // アカウント名
             String password = (String) session.getAttribute(PASSWORD);     // パスワード
             
-            success = service.execute(accountId, email, password);
+            try {
+				success = service.execute(accountId, email, password);
+			} catch (ClassNotFoundException | SQLException | IOException | URISyntaxException e) {
+				log.catching(e);
+			}
 
             log.info("Welcome, " + accountId + "!");
             

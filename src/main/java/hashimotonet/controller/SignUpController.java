@@ -53,14 +53,11 @@ public class SignUpController implements ControllerBase {
 	    session.setAttribute(PASSWORD, password);
 	    
 		String protocol = request.getProtocol();
-		String prefix = "http://";
+		String prefix = "https://";
 		
 		String url = "";
-		if (protocol.startsWith("HTTPS")) {
-			prefix = "https://";
-		}
 	    
-		url = prefix + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/Regist" + "?sessionid=" + session.getId();
+		url = prefix + request.getServerName() + request.getContextPath() + "/Regist?sessionid=" + session.getId();
 		
 		log.info(url);
 		

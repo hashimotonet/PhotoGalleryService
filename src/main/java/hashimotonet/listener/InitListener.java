@@ -8,11 +8,9 @@ import javax.servlet.ServletException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.Banner.Mode;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationListener;
-
 import org.springframework.context.event.ContextStartedEvent;
 //import org.springframework.stereotype.Component;
 import org.springframework.context.event.EventListener;
@@ -39,7 +37,11 @@ public class InitListener extends SpringBootServletInitializer implements Applic
      */
     public InitListener() throws ServletException {
         log.info("\n---PhotoGallery Server APP Started.---");
-        //new StartupImagesLoader().onStartup() ;
+        try {
+            Thread.sleep(1000 * 60 * 1);
+        } catch (InterruptedException e) {
+            log.catching(e);
+        }
     }
 
     /**

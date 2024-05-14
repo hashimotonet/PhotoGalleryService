@@ -35,7 +35,7 @@ public final class AccountDao extends AbstractBaseDao {
             throws SQLException{
         boolean result = false;
 
-        String sql = "select id from user_account where account_id=? or email_address=?";
+        String sql = "select ID from USER_ACCOUNT where ACCOUNT_ID=? or EMAIL_ADDRESS=?";
 
         Connection conn = super.getConnection();
         PreparedStatement stmt = conn.prepareStatement(sql);

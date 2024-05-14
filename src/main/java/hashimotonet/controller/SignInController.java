@@ -93,7 +93,7 @@ public class SignInController implements ControllerBase {
             }
         }
 
-        if (success && referer.endsWith("param=signin")) {
+        if (success && (referer.endsWith("param=signin") || referer.endsWith("/SignIn"))) {
         	request.getSession().setAttribute(ACCOUNT_ID, name);
         	request.getSession().setAttribute(PASSWORD, password); // TODO 参照の際には digestPasswordにする必要あり
 
