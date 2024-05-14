@@ -21,9 +21,6 @@ public class MailSendRepository {
     @Value("${sender.mail-address}")
     private String fromEmail;
 
-    //@Autowired
-    //private MailSender mailSender;
-    
     @Autowired
     private MailContentFactory mailContentFactory;
     
@@ -41,9 +38,6 @@ public class MailSendRepository {
     @Async
     public void sendRegistMail(String url, String toEmailAddress) {
     	
-    	// TODO スタブ
-    	// toEmailAddress = "develop.photogallery@gmail.com";
-
         // メール内容作成
         String content = mailContentFactory.create((MailTemplate) new MailTemplateImpl(url));
         
@@ -51,13 +45,6 @@ public class MailSendRepository {
         MimeMessageHelper helper;
         
         // メール設定
-//        val mailMessage = new MailMessageBuilder()
-//                .from(fromEmail)
-//                .to(toEmailAddress)
-//                .subject("【PhotoGallery】登録確認メール")
-//                .content(content)
-//                .build();
-
         try {
             helper = new MimeMessageHelper(message, true /* multipart */, "UTF-8");
             helper.setFrom(fromEmail);

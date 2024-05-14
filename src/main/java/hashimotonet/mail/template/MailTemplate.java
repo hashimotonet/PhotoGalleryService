@@ -14,4 +14,6 @@ public interface MailTemplate {
      * @return テンプレートに埋め込む変数と値のマップ
      */
     Map<String, Object> getVariables();
+    
+    public static final String FROM_ADDRESS = "develop.photogallery@gmail.com";
 }

@@ -1,40 +1,27 @@
 package hashimotonet.mail;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import hashimotonet.mail.template.MailTemplate;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MailSenderService {
+public class MailSenderService implements MailTemplate {
 
 	@Autowired
     private MailSender mailSender;
-
-	/**
-	 * @javadoc
-	 */
-	// TODO 送信自体はできているので、後に setText などの文言は拡張することにしておく。
-    public void sendMail() {
-        var mailInfo = new SimpleMailMessage();
-        mailInfo.setSubject("Javaの実装練習です");
-        mailInfo.setText("お元気ですかテストです");
-        mailInfo.setTo("develop.photogallery@gmail.com");
-        mailInfo.setFrom("akimbo.himawari0311@gmail.com");
-
-        mailSender.send(mailInfo);
-
-    }
 
     public void sendMail(String url, String toAddress) {
         var mailInfo = new SimpleMailMessage();
         mailInfo.setSubject("Javaの実装練習です");
         mailInfo.setText("お元気ですかテストです");
-        mailInfo.setTo("develop.photogallery@gmail.com");
-        // mailInfo.setFrom("akimbo.himawari0311@gmail.com");
+        mailInfo.setTo(FROM_ADDRESS);
 
         mailSender.send(mailInfo);
     }
@@ -50,6 +37,17 @@ public class MailSenderService {
 	 * @return
 	 */
 	private String createMailBody(String url) {
+		return url;
+	}
+
+	@Override
+	public String getTemplatePath() {
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> getVariables() {
+		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 }
