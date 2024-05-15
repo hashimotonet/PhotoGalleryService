@@ -8,9 +8,11 @@ Spring の数あるサービスのうち、
 ・SpringDataJDBC
 ・SpringDataJPA
 などを軽微に使用しています。
+
 =======
 
 http://localhost:8080/PhotoGallery/
+<br>
 https://osm.yokohama/
 
 Let's Enjoy!
