@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hashimotonet.action.SignInAction;
-import hashimotonet.controller.base.ControllerBase;
+import hashimotonet.controller.base.ControllerBaseImpl;
 import hashimotonet.domain.dto.Account;
 import hashimotonet.handler.CustomHttpStatusRequestRejectedHandler;
 
@@ -31,7 +31,7 @@ import hashimotonet.handler.CustomHttpStatusRequestRejectedHandler;
 @Controller
 @SessionAttributes(types = {Account.class}, names= {"account"})
 @RequestMapping("/")
-public class SignInController implements ControllerBase {
+public class SignInController extends ControllerBaseImpl {
 
     Logger log = (Logger) LogManager.getLogger(SignInController.class);
 
@@ -105,7 +105,7 @@ public class SignInController implements ControllerBase {
             case SMART_PHONE:
                 return "smart";
             case TABLET:
-            	return "photo";
+            	return "smart";
             case PC:
             	return "photo";
             default:
@@ -132,37 +132,4 @@ public class SignInController implements ControllerBase {
           return new CustomHttpStatusRequestRejectedHandler();
       }
 
-
-      private DEVICE_TYPE getDeviceType(String userAgent) {
-          //
-          //スマートフォン系
-          //
-   
-          //iPhone / iPod
-          if(userAgent.indexOf("iPhone") != -1) {
-              return DEVICE_TYPE.SMART_PHONE;
-          }
-   
-          //Android
-          if(userAgent.indexOf("Android") != -1 && userAgent.indexOf("Mobile") != -1) {
-              return DEVICE_TYPE.SMART_PHONE;
-          }
-   
-          //
-          //タブレット系
-          //
-   
-          //iPad
-          if(userAgent.indexOf("iPad") != -1) {
-              return DEVICE_TYPE.TABLET;
-          }
-   
-          //Android
-          if(userAgent.indexOf("Android") != -1) {
-              return DEVICE_TYPE.TABLET;
-          }
-   
-          //その他なので、とりあえずPC扱い
-          return DEVICE_TYPE.PC;
-      }
 }
