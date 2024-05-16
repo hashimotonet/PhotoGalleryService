@@ -26,14 +26,14 @@
   })(window.navigator.userAgent.toLowerCase());
   //ファイルが選択されたら読み込む
   function selectReadfile(e) {
-	debugger;
+	//debugger;
 	var file = e.target.files;
     var reader = new FileReader();
     var canvas = document.getElementById('capture_image');
     //dataURL形式でファイルを読み込む
     reader.readAsDataURL(file[0]);
     //ファイルの読込が終了した時の処理
-    debugger;
+    //debugger;
     reader.onload = function(){
       readDrawImg(reader, canvas, 0, 0);
     }

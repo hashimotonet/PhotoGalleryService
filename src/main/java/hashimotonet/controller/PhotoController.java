@@ -42,7 +42,7 @@ public class PhotoController extends ControllerBaseImpl {
         case SMART_PHONE:
             return "smart";
         case TABLET:
-        	return "photo";
+        	return "smart";
         case PC:
         	return "photo";
         default:
