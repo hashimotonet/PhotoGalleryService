@@ -26,12 +26,14 @@
   })(window.navigator.userAgent.toLowerCase());
   //ファイルが選択されたら読み込む
   function selectReadfile(e) {
-    var file = e.target.files;
+	debugger;
+	var file = e.target.files;
     var reader = new FileReader();
     var canvas = document.getElementById('capture_image');
     //dataURL形式でファイルを読み込む
     reader.readAsDataURL(file[0]);
     //ファイルの読込が終了した時の処理
+    debugger;
     reader.onload = function(){
       readDrawImg(reader, canvas, 0, 0);
     }
@@ -114,14 +116,12 @@
   const start = document.getElementById('start_btn');
   if (window.matchMedia && window.matchMedia('(max-device-width: 640px)').matches) {
       document.getElementById('sp').style.display = 'block';
-      document.getElementById('pc').style.display = 'none';
       start.style.display = 'none';
   } else {
      document.getElementById('sp').style.display = 'none';
-     document.getElementById('pc').style.display = 'block';
      start.style.display = 'block';
   }
 
-  const camera = document.getElementById('camera');
-  camera.addEventListener('change', selectReadfile, false);
+//  const camera = document.getElementById('camera');
+//  camera.addEventListener('change', selectReadfile, false);
   

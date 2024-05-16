@@ -61,7 +61,7 @@ public class SecurityConfig {
         ).authorizeHttpRequests(authz -> authz
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/").permitAll()
-                .requestMatchers("/SignUp", "/Regist", "/SignIn", "/Upload", "/ListImages", "/SignOut", "/photo.html").permitAll()
+                .requestMatchers("/SignUp", "/Regist", "/SignIn", "/Upload", "/ListImages", "/SignOut", "/Photo", "/smart.html").permitAll()
                 .requestMatchers("/*/*.jpg").permitAll()
                 .anyRequest().authenticated()
         );

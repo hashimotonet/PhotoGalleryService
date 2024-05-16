@@ -16,6 +16,12 @@ public interface ControllerBase {
      * パスワード
      */
     public static final String PASSWORD = "password";
+    
+    public enum DEVICE_TYPE {
+        SMART_PHONE,
+        TABLET,
+        PC
+    };
 
 
 }

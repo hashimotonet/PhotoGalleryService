@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script>
+function photo() {
+	document.frm.method = 'POST';
+	document.frm.action='Photo';
+	document.frm.submit();
+	return;
+}
+</script>
 <title>【登録処理完了】PhotoGallery</title>
 </head>
 <body>
   <h3>PhotoGalleryへの登録処理が完了しました。</h3>
+  <form name="frm"></form>
+  <br>
+  <br>
+  <div align='center'>
+	<button id="photo" type="button" class="btn btn-primary btn-sm" onClick="javascript:photo();" >Photo</button>
+  </div>
 </body>
 </html>

@@ -92,12 +92,25 @@ public class SignInController implements ControllerBase {
 
             }
         }
+        
+        String smart = "";
 
         if (success && (referer.endsWith("param=signin") || referer.endsWith("/SignIn"))) {
         	request.getSession().setAttribute(ACCOUNT_ID, name);
         	request.getSession().setAttribute(PASSWORD, password); // TODO 参照の際には digestPasswordにする必要あり
 
             response.setStatus(HttpServletResponse.SC_OK);
+            
+            switch(getDeviceType(request.getHeader("user-agent"))) {
+            case SMART_PHONE:
+                return "smart";
+            case TABLET:
+            	return "photo";
+            case PC:
+            	return "photo";
+            default:
+                break;
+            }
 
             return "photo";
 
@@ -120,50 +133,36 @@ public class SignInController implements ControllerBase {
       }
 
 
-      /*	@PostMapping
-        public String index(@RequestParam("userName") String id, @RequestParam("password") String password, Model model) {
-
-            SignInAction action = new SignInAction();
-            boolean success = false;
-
-            model.addAttribute("id", id);
-            model.addAttribute("password", password);
-
-            String referer = request.getHeader("REFERER");
-
-            if (referer.endsWith("ListImages")) {
-                success = true;
-            }
-
-            if (false == success) {
-
-                try {
-
-                    success = action.execute(request, id, password);
-
-                } catch(ClassNotFoundException | IOException | SQLException | URISyntaxException e) {
-
-                    log.catching(e);
-
-                }
-            }
-
-            if (success) {
-
-                response.setStatus(HttpServletResponse.SC_OK);
-
-                return "photo";
-
-            } else {
-
-                model.addAttribute("auth", "unauthorized");
-
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-                return "index";
-            }
-
+      private DEVICE_TYPE getDeviceType(String userAgent) {
+          //
+          //スマートフォン系
+          //
+   
+          //iPhone / iPod
+          if(userAgent.indexOf("iPhone") != -1) {
+              return DEVICE_TYPE.SMART_PHONE;
           }
-    */
-
+   
+          //Android
+          if(userAgent.indexOf("Android") != -1 && userAgent.indexOf("Mobile") != -1) {
+              return DEVICE_TYPE.SMART_PHONE;
+          }
+   
+          //
+          //タブレット系
+          //
+   
+          //iPad
+          if(userAgent.indexOf("iPad") != -1) {
+              return DEVICE_TYPE.TABLET;
+          }
+   
+          //Android
+          if(userAgent.indexOf("Android") != -1) {
+              return DEVICE_TYPE.TABLET;
+          }
+   
+          //その他なので、とりあえずPC扱い
+          return DEVICE_TYPE.PC;
+      }
 }

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <title>カメラ撮影画面</title>
+</head>
+<body>
+  <div align="center"><h1>カメラ撮影画面</h1></div>
+
+    <!-- ネイティブカメラを呼び出します。 -->
+    <div id="sp" align="center">
+      <input type="file" id="camera" capture="environment" accept="image/*" style="display:none">
+    </div>
+
+    <!-- キャプチャした静止画が描画されます。 -->
+   <canvas id="capture_image" width="200" height="160"></canvas><br/>
+    <label for="alt_text">Please insert a comment here.</label>
+    <input id="alt_text" width="400" />
+    <div align="center">
+      <!-- 押下するとカメラ映像描画を開始します。 -->
+      <button id="start_btn" class="btn btn-primary btn-sm">映像表示開始</button>
+
+      <!-- 押下するとカメラ映像から静止画をキャプチャします。 -->
+      <button onclick="copyFrame()" class="btn btn-primary btn-sm">静止画取得</button>
+
+      <p>
+
+    <form id="frm" name="frm">
+    <!-- <input type="hidden" th:if="${session.account != null}" th:field="*{account}" />		-->
+        <input type="hidden" id="id" name="id" th:field="${account.id}" />
+        <!-- <input type="hidden" id="password" name="password" th:field="${account.password}" /> -->
+
+      <button type="button" id="btn-send" class="btn btn-primary btn-sm">サーバへ保存</button>
+
+        <button type="button" id="btn-disp" class="btn btn-primary btn-sm">一覧画面表示</button><br><br>
+
+    <button type="button" id="btn-logout" class="btn btn-primary btn-sm">ログアウト</button>
+    </form>
+    </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="js/camera.js"></script>
+<script>
+  var cameraElement = document.getElementById('camera');
+</script>
+<script type="text/javascript">
+
+
+    // 操作する画面エレメント変数定義します。
+    const $start = document.getElementById('start_btn');   // カメラ
+
+    // 「スタートボタン」を押下したら、getUserMedia を使って映像を「映像表示エリア」に表示してね。
+    $start.addEventListener('click', function(event) {
+        cameraElement.click();
+    });
+
+    cameraElement.addEventListener('change', function(event) {
+        debugger;
+      selectReadfile(event);
+    });
+
+
+  // 静止画画像
+    var canvas_capture_image;
+
+    // 「静止画取得」ボタンが押されたら「<canvas id="capture_image">」に映像のコマ画像を表示します。
+    function copyFrame() {
+
+        camera.click();
+        canvas_capture_image = document.getElementById('capture_image');
+        var cci = canvas_capture_image.getContext('2d');
+        var va = screen;
+
+        canvas_capture_image.width  = va.width / 2;
+        canvas_capture_image.height = va.height / 2	;
+        cci.drawImage(canvas_capture_image, 0, 0);  // canvasに『「静止画取得」ボタン』押下時点の画像を描画。
+    }
+
+  //---------------------------------------------
+ // 定数定義
+ //---------------------------------------------
+ // 保存を行うプログラムがあるURL
+ const SAVE_URL = '/PhotoGallery/Upload';
+//---------------------------------------------
+//[event] ページ読み込み完了
+//---------------------------------------------
+//window.onload = ()=>{
+
+    //---------------------------------------------
+    // 保存ボタンが押されたらサーバへ送信する
+    //---------------------------------------------
+   function onSendClick() {
+       // Canvasなどのデータを取得
+       const canvas = document.getElementById("capture_image").toDataURL("image/png");  // DataURI Schemaが返却される
+       const id =document.getElementById("id").value;
+       var    alt=document.getElementById("alt_text").value;
+
+       if( !checkLettersPermitted(alt) ) {
+         alert("Please write a comment in English.\r\n入力は半角英数で行ってください。");
+         document.getElementById("alt_text").forcus();
+         return;
+       }
+
+       const json = {
+           "identity":id,
+           "alt":alt,
+           "data":canvas
+       };
+
+       //alert(eval(json));
+
+       // 送信情報の設定
+       const param  = {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json; charset=utf-8"
+         },
+         //body: JSON.stringify({data: canvas})
+         body: JSON.stringify(json)
+       };
+
+       // サーバへ送信
+       sendServer(SAVE_URL, param);
+   }
+
+   const send = document.getElementById("btn-send");
+  send.addEventListener("click", onSendClick);
+/*    document.querySelector("#btn-send").addEventListener("click", function(event) {
+    onSendClick();
+  }); */
+
+  document.querySelector("#btn-disp").addEventListener("click", ()=>{
+     document.frm.action="ListImages";
+     document.frm.method="post";
+     document.frm.submit();
+  });
+
+  document.querySelector("#btn-logout").addEventListener("click", ()=>{
+     document.frm.action="SignOut";
+     document.frm.method="post";
+     document.frm.submit();
+  });
+
+//};
+
+
+  /**
+   * 半角英数チェック。
+  */
+  function checkLettersPermitted(str){
+    str = (str==null)?"":str;
+    if(str.match(/^[a-zA-Z0-9!-/:-@¥[-`{-~\s]*$/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  /**
+   * サーバへJSON送信
+   *
+   * @param url   {string} 送信先URL
+   * @param param {object} fetchオプション
+   */
+  function sendServer(url, param){
+    fetch(url, param)
+      .then((response)=>{
+        return response;
+      })
+      .then((response)=>{
+        if(response.status){
+          alert("送信に『成功』しました" );
+          //setImage(json.result);    //json.resultにはファイル名が入っている
+        }
+        else{
+          console.log(response.status);
+          alert("送信に『失敗』しました");
+          console.log(`[error1]${error}`);
+        }
+      })
+      .catch((error)=>{
+        alert("送信に『失敗』しました");
+        console.log(`[error2] ${error}`);
+      });
+  }
+
+</script>
+
+</html>
