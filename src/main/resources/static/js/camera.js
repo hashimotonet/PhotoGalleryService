@@ -47,17 +47,17 @@
       printWidthHeight( 'src-width-height', true, w, h);
       // モバイルであればリサイズ
       if(_ua.Mobile[0]){
-        var resize = resizeWidthHeight(8, w, h);
+        var resize = resizeWidthHeight(512, w, h);
         alert("w=" + w + " : h=" + h + " : resize.w=" + resize.w + " : resize.h=" + resize.h);
         //printWidthHeight( 'dst-width-height', resize.flag, resize.w, resize.h);
         drawImgOnCav(canvas, img, x, y, resize.w, resize.h);
-      } //else{
+      } else {
 //        // モバイル以外では元サイズ
 //        printWidthHeight( 'dst-width-height', false, 0, 0);
         drawImgOnCav(canvas, img, x, y, w, h);
       }
     }
-  //}
+  }
 
   //ファイルの読込が終了した時の処理
   function readImg(reader){

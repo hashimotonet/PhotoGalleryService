@@ -2,11 +2,13 @@
 
 クラウド対応画像ストアアプリ：PhotoGalleryを公開サービスとするためのソースをコミットするためのリポジトリです。
 Spring の数あるサービスのうち、
-・SpringBoot
-・SpringSecurity
-・SpringSession
-・SpringDataJDBC
-・SpringDataJPA
+<br><br>
++SpringBoot<br>
++SpringSecurity<br>
++SpringSession<br>
++SpringDataJDBC<br>
++SpringDataJPA<br>
+<br>
 などを軽微に使用しています。
 
 =======
