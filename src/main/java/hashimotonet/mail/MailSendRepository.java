@@ -12,10 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import hashimotonet.mail.template.MailTemplate;
 import hashimotonet.mail.template.MailTemplateImpl;
-import lombok.RequiredArgsConstructor;
 
 @Repository
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MailSendRepository {
 
     @Value("${sender.mail-address}")
