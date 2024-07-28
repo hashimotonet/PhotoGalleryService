@@ -66,6 +66,12 @@ public class PhotoEntity implements Example<String> {
      */
 	@Column(name = "alt")
     private String alt;
+	
+	/**
+	 * Chat-GPTによるメッセージ
+	 */
+	@Column(name = "chat")
+	private String chat;
 
     /**
      * デフォルトコンストラクタ

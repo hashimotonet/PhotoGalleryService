@@ -19,8 +19,13 @@ public class AppConfig {
 
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
-        Connector connector = new Connector("AJP/1.3");
-        connector.setPort(8009);
+        boolean aws = false;
+    	Connector connector = new Connector("AJP/1.3");
+        if (aws) {
+        	connector.setPort(8009);
+        } else {
+            connector.setPort(8080);
+        }
         connector.setRedirectPort(8443);
 
         ((AbstractAjpProtocol<?>) connector.getProtocolHandler()).setSecretRequired(false);

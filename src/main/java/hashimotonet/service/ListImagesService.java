@@ -163,12 +163,8 @@ public class ListImagesService {
             //PhotoDao dao = new PhotoDao();
 
             // IDが同一であるもののレコードの画像データを取得する
-            //List<Photo> images = dao.selectPhotoBlobsById(id);
             List<Photo> images = service.getAllPhotoList(id);
             
-            // DAOのクローズ
-            //dao.close();
-
             // 要求電文、ID、画像データを引数に、画像の一時イメージファイル集を
             // 作成し、ファイル一覧を戻り値として取得する。
             files = FileProcessorUtil.writeImageById(request.getServletContext(),
@@ -187,32 +183,10 @@ public class ListImagesService {
         ObjectMapper mapper = new ObjectMapper();
         output = mapper.writeValueAsString(urls);
         
-        log.trace(output);
+        log.info(output);
         
         return output;
         
-        /**
-
-        if (smartPhone) {
-            out.println(output);
-        } else {
-        	String path = "/WEB-INF/display.jsp";
-        	
-            //request.setCharacterEncoding("UTF-8");
-        	response.setContentType("text/json; charset=UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            request.setAttribute("images", output);
-            request.getServletContext().getRequestDispatcher(path).forward(request, response);
-        }
-
-        
-        // 処理は成功したので、処理結果を真とする。
-        result = true;
-
-        // 処理結果を返却する。
-        return result;
-        
-        */
     }
 
 
@@ -242,7 +216,10 @@ public class ListImagesService {
       }
       
       for(URLHolder file : files) {
-          // 画像イメージのURLを生成する。
+          
+    	  bean.setId(file.getId());
+    	  
+    	  // 画像イメージのURLを生成する。
           String url = null;
           if (https) {
         	  url = "https://";

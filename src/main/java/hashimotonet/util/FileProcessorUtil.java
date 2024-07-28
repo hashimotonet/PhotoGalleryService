@@ -128,6 +128,7 @@ public final class FileProcessorUtil {
 				String idComp = String.valueOf(photo.getId()); 
         		if (urlComp.equals(idComp)) {
         			bean.setAlt(photo.getAlt());
+        			bean.setId(idComp);
         			break;
         		}
         	}
@@ -175,6 +176,7 @@ public final class FileProcessorUtil {
         	photo = iterator.next();
         	
         	String id = String.valueOf(photo.getId());
+        	holder.setId(id);
 
             // フォルダのパスとカウンタをファイル名でパスを生成。
             String path = directory + SEP + id + ".jpg";

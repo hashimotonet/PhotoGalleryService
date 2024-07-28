@@ -17,9 +17,11 @@ public class ControllerBaseImpl implements ControllerBase {
 
 
     public DEVICE_TYPE getDeviceType(String userAgent) {
-        //
-        //スマートフォン系
-        //
+        
+    	/**
+         * スマートフォン系
+         */
+        
  
         //iPhone / iPod
         if(userAgent.indexOf("iPhone") != -1) {
@@ -31,10 +33,10 @@ public class ControllerBaseImpl implements ControllerBase {
             return DEVICE_TYPE.SMART_PHONE;
         }
  
-        //
-        //タブレット系
-        //
- 
+        /**
+         * タブレット系
+         */
+        
         //iPad
         if(userAgent.indexOf("iPad") != -1) {
             return DEVICE_TYPE.TABLET;

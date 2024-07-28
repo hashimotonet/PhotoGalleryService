@@ -31,6 +31,10 @@ public class PhotoDao extends AbstractBaseDao {
     private final String insertSQL = "insert into photo (identity, authority, data, alt) values (?, ?, ?, ?)";
 
     private final String selectMaxSQL = "select max(id) from photo";
+    
+    private final String updateSQL = "update photo (chat = ?) where id = ?";
+    
+    private final String selectChatSQL = "select chat from photo where id = ?";
 
     /**
      * ロガー
@@ -52,6 +56,46 @@ public class PhotoDao extends AbstractBaseDao {
         super();
     }
 
+    /**
+     * 該当カラムのChatGPTメッセージの存在有無を確認する。
+     * 
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public boolean chatExists(String id) throws SQLException {
+    	boolean result = false;
+    	int index = Integer.valueOf(id).intValue();
+
+        // JDBC接続
+        Connection conn = null;
+
+        // プレースホルダ付きSQL文対応のステートメント
+        PreparedStatement stmt = null;
+
+        // JDBC接続を取得
+        conn = super.getConnection();
+
+        // ステートメントを作成
+        stmt = conn.prepareStatement(insertSQL);
+        
+        // DMLのプレースホルダにパラメータをセット
+        stmt.setInt(1,index);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        if (rs.next()) {
+        	result = true;
+        }
+        
+        rs.close();
+        stmt.close();
+        conn.close();
+        
+        return result;
+        
+    }
+    
     /**
      * データ挿入メソッド
      *

@@ -3,65 +3,46 @@
  */
 package hashimotonet.bean;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Osamu Hashimoto
  *
  */
+@Getter
+@Setter
 public class URLHolder {
+	
+	private String id;
 
-    private String url;
+    /**
+     * 画像のURL
+     */
+	private String url;
 
+    /**
+     * ユーザによる撮影時の入力テキスト
+     */
+	private String alt;
+    
+	/**
+	 * URL画像に対するChat-GPTからのメッセージ
+	 */
+    private String chat;
+
+	/**
+	 * 画像サムネイル
+	 * （現在未使用）
+	 */
+	@Deprecated
     private String thumbnail;
     
-    private String alt;
-
     /**
      * デフォルトコンストラクタ
      */
     public URLHolder() {
         super();
     }
-
-    /**
-     * @return url
-     */
-    public final String getUrl() {
-        return url;
-    }
-
-    /**
-     * @param url セットする url
-     */
-    public final void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
-     * @return thumbnail
-     */
-    public final String getThumbnail() {
-        return thumbnail;
-    }
-
-    /**
-     * @param thumbnail セットする thumbnail
-     */
-    public final void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-	/**
-	 * @return alt
-	 */
-	public final String getAlt() {
-		return alt;
-	}
-
-	/**
-	 * @param alt セットする alt
-	 */
-	public final void setAlt(String alt) {
-		this.alt = alt;
-	}
 
 }

@@ -1,33 +1,22 @@
-var myApp = angular.module('myApp',  [  ]) //'ngRoute'
-myApp.controller('UserController', 
-	function UserController($scope) {
-		$scope.json = null;
-
-	    $scope.getUsersList = function() {
-
-			data = JSON.parse(data);
-
-			console.log(data);
-
-			$scope.json = data;
-	    };
-
-	    $scope.ClickFunction = function(url) {
-            askGpt(url);
-	    }
-  	}
-);
-
-function askGpt(url) { // check, url　が引数？
-  if (this.checked == false) {
+/**
+ *
+ */
+function askGpt(check) {
+  if (check.checked == false) {
     return false;
   }
   
-  var num = url.substring(url.lastIndexOf("."));
+  let name = check.name;
+  const url  = name;
+  const start = name.lastIndexOf("/") + 1;
+  const end = name.lastIndexOf(".") - 1;
+  var num = name.substring(start, end);
 
-  // ajax処理で、CharGPTからのメッセージ取得
+  /**
+   * ajax処理で、CharGPTからのメッセージ取得
+   */
   $.ajax({
-          url:'../ChatGptServlet',
+          url:'ChatGptServlet',
           type:'POST',
           data:{
             'url':url
@@ -35,6 +24,7 @@ function askGpt(url) { // check, url　が引数？
         })
         // Ajax通信が成功したら発動
         .done( (data) => {
+		  alert("成功です\r\n" + data);
           renderGptMessage(data, num);
         })
         // Ajax通信が失敗したら発動
@@ -50,7 +40,6 @@ function askGpt(url) { // check, url　が引数？
         });
 
 }
-
 
 /**
  * document.getElementById().innerHTML で、メッセージ出力。
