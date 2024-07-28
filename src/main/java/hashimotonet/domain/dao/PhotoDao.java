@@ -55,6 +55,80 @@ public class PhotoDao extends AbstractBaseDao {
         // 親クラスのコンストラクタ呼び出し
         super();
     }
+    
+    /**
+     * ChatGPT接続履歴より、メッセージを取得する。
+     * 
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public String getChatMessage(String id) throws SQLException {
+
+    	String message = "";
+    	
+    	// JDBC接続を取得
+        Connection conn = super.getConnection();
+
+        // ステートメントを作成
+        PreparedStatement pStmt = conn.prepareStatement(selectChatSQL);
+
+        // DMLのプレースホルダにIDをセット
+        pStmt.setString(1, id);
+
+        // 検索実行
+        ResultSet rs = pStmt.executeQuery();
+
+        // 検索結果があれば取得する
+        if(rs.next()) {
+        	message = rs.getString("chat");
+        }
+        
+        rs.close();
+        pStmt.close();
+        conn.close();
+        
+        return message;
+    }
+    
+    /**
+     * 取得したChatGPTからの応答メッセージをPhoto表にストア
+     * 
+     * @param chat
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public boolean updateChatMessage(String chat, String id) throws SQLException {
+    	boolean result = false;
+    	
+        // JDBC接続
+        Connection conn = null;
+
+        // プレースホルダ付きSQL文対応のステートメント
+        PreparedStatement stmt = null;
+
+        // JDBC接続を取得
+        conn = super.getConnection();
+
+        // ステートメントを作成
+        stmt = conn.prepareStatement(updateSQL);
+        
+        // DMLのプレースホルダにパラメータをセット
+        stmt.setString(1,chat);
+        stmt.setString(2, id);
+        
+        int updated = stmt.executeUpdate(); 
+        
+        stmt.close();
+        conn.close();
+        
+        if (updated > 0) {
+        	result = true;
+        }
+        
+    	return result;
+    }
 
     /**
      * 該当カラムのChatGPTメッセージの存在有無を確認する。
@@ -77,7 +151,7 @@ public class PhotoDao extends AbstractBaseDao {
         conn = super.getConnection();
 
         // ステートメントを作成
-        stmt = conn.prepareStatement(insertSQL);
+        stmt = conn.prepareStatement(selectChatSQL);
         
         // DMLのプレースホルダにパラメータをセット
         stmt.setInt(1,index);

@@ -5,7 +5,7 @@ from openai import OpenAI
 
 # デプロイ時に削除
 openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_key = 'sk-proj-J8SwE6PDBgvaTPjdvodJT3BlbkFJpFtBnRZRYXoiEAbthgad'
+openai.api_key = '*********'
 
 args = sys.argv
 image_url = args[1] 
