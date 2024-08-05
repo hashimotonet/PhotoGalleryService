@@ -128,6 +128,8 @@ public final class FileProcessorUtil {
 				String idComp = String.valueOf(photo.getId()); 
         		if (urlComp.equals(idComp)) {
         			bean.setAlt(photo.getAlt());
+        			bean.setId(idComp);
+        			bean.setCreatedAt(photo.getCreatedAt());
         			break;
         		}
         	}
@@ -163,9 +165,6 @@ public final class FileProcessorUtil {
         // ID名であるディレクトリを作成
         String directory = mkdir(identity, context);
 
-        // カウンタ初期化
-        // int index = 1;
-
         // イテレーター取得
         Iterator<Photo> iterator = images.iterator();
         Photo photo = null;
@@ -175,7 +174,11 @@ public final class FileProcessorUtil {
         	photo = iterator.next();
         	
         	String id = String.valueOf(photo.getId());
+        	holder.setId(id);
 
+        	// added.
+        	holder.setCreatedAt(photo.getCreatedAt());
+        	
             // フォルダのパスとカウンタをファイル名でパスを生成。
             String path = directory + SEP + id + ".jpg";
 

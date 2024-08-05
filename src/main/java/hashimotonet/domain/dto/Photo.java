@@ -36,6 +36,16 @@ public class Photo {
      * alt テキスト
      */
     private String alt;
+    
+    /**
+     * ChatGPTからの応答メッセージ
+     */
+    private String chat;
+    
+    /**
+     * 画像アップロード日時
+     */
+    private String createdAt;
 
     /**
      * デフォルトコンストラクタ

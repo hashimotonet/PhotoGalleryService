@@ -1,33 +1,32 @@
-var myApp = angular.module('myApp',  [  ]) //'ngRoute'
-myApp.controller('UserController', 
-	function UserController($scope) {
-		$scope.json = null;
+/**
+ *
+ */
+var data;
 
-	    $scope.getUsersList = function() {
+function askGpt(check) {
+  if (check.checked == false) {
+    return;
+  }
 
-			data = JSON.parse(data);
+  let name = check.name;
+  const url  = name;
+  const start = name.lastIndexOf("/") + 1;
+  const end = name.lastIndexOf(".");
+  var num = name.substring(start, end);
 
-			console.log(data);
-
-			$scope.json = data;
-	    };
-
-	    $scope.ClickFunction = function(url) {
-            askGpt(url);
-	    }
-  	}
-);
-
-function askGpt(url) { // check, url　が引数？
-  if (this.checked == false) {
-    return false;
+  const objId = 'chat' + num;
+  var elmStr = document.getElementById(objId).innerHTML;
+  if (elmStr != null && elmStr != "") {
+   return;
   }
   
-  var num = url.substring(url.lastIndexOf("."));
+  showModal();
 
-  // ajax処理で、CharGPTからのメッセージ取得
+  /**
+   * ajax処理で、CharGPTからのメッセージ取得
+   */
   $.ajax({
-          url:'../ChatGptServlet',
+          url:'ChatGptServlet',
           type:'POST',
           data:{
             'url':url
@@ -46,15 +45,7 @@ function askGpt(url) { // check, url　が引数？
         })
         // Ajax通信が成功・失敗のどちらでも発動
         .always( (data) => {
-           //return data;
+           hideModal();
         });
 
-}
-
-
-/**
- * document.getElementById().innerHTML で、メッセージ出力。
- */
-function renderGptMessage(data, index) {
-	document.getElementById('chat' + index).innerHTML = data;
 }

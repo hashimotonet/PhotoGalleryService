@@ -1,6 +1,8 @@
 package hashimotonet.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,6 +48,8 @@ public class PhotoService {
 		
 		// 引数のModelよりEntityに値をコピー。
 		BeanUtils.copyProperties(photo, entity);
+		
+		entity.setCreatedAt(new Date());
 		
 		log.debug(entity);
 		
@@ -106,9 +110,16 @@ public class PhotoService {
 		entityList.forEach(entity -> {
 			Photo photo = new Photo();
 	        BeanUtils.copyProperties(entity, photo);
+	        photo.setCreatedAt(date2String(entity.getCreatedAt()));
 	        photos.add(photo);
 	    });
 	    return photos;
+	}
+	
+	private String date2String(Date createdAt) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = dateFormat.format(createdAt);
+		return strDate;
 	}
 
 }

@@ -12,13 +12,39 @@ img {
   width: 266px;
 }
 td {
-	padding: 30px;
+  padding: 30px;
 }
+  /* モーダルウィンドウのスタイル */
+  .modal {
+      display: none; /* 初期は非表示 */
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      /* background-color: rgba(0,0,0,0.5);  黒の半透明 */
+      background-color: #EEEEEE;
+  }
+
+  .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 </style>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="css/bootstrap.css" />
+<!--<link rel="stylesheet" type="text/css" href="css/modal_style.css" />-->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script th:inline="javascript">
     var data = /*[[${images}]]*/ '';
 </script>
@@ -26,59 +52,91 @@ td {
 <title>Display Images</title>
 </head>
 <body>
-	<div align="right"><h3>[[${id}]]</h3></div>
-	<hr/>
-	<div id="headline_contents" class="customImage"></div>
+  <div id="myModal" class="modal" style="align-content: center;">
+      <div class="modal-content" style="width: 30%;">
+          <p>画像解析中です。お待ちください...</p>
+      </div>
+  </div>
+  <script>
+          function showModal() {
+              document.getElementById('myModal').style.display = 'block';
+          }
+  
+          function hideModal() {
+              document.getElementById('myModal').style.display = 'none';
+          }
+  </script>
+  <script src="js/askGpt.js"></script>
+  <div align="right"><h3>[[${id}]]</h3></div>
+  <hr/>
+  <div id="headline_contents" class="customImage"></div>
 
-	<div ng-controller="UserController">
-	    <table class="table table-striped" ng-init="getUsersList()">
-	        <tr valign="middle" align="center">
-	            <th>Image</th>
-	            <th>URL</th>
-	            <th>Comment</th>
-	        </tr>
-	        
-	        <!--  Angular.jsによる繰り返し表示  -->
-	        <tr ng-repeat="photo in json track by $index">
-	            <td align="center">
-	              <a href="{{photo.url}}" target="_blank">
-	                <img alt="{{photo.alt}}" title="{{photo.alt}}" src="{{photo.url}}">
-	              </a>
-	              <br/>{{photo.alt}}
-	            </td>
-	            <td valign="middle">
-	              <a href="{{photo.url}}" target="_blank">{{photo.url}}</a>
-	            </td>
-	            <td valign="middle">
-	              {{photo.alt}}
-	            </td>
-	        </tr>
-	    </table>
-	</div>
+  <div ng-controller="UserController">
+      <table class="table table-striped" ng-init="getUsersList()">
+          <tr valign="middle" align="center">
+        	  <th>Ask GPT</th>
+              <th>Image</th>
+              <th>URL</th>
+              <th>Comment</th>
+          </tr>
+
+          <!--  Angular.jsによる繰り返し表示  -->
+          <tr ng-repeat="photo in json track by $index">
+              <td>
+                <input type="checkbox" id='check{{photo.id}}' name='{{photo.url}}' onchange="askGpt(this);"/>
+              </td>
+              <td align="center">
+                 <a href="{{photo.url}}" target="_blank">
+                   <img alt="{{photo.alt}}" title="{{photo.alt}}" src="{{photo.url}}">
+                 </a>
+                <br>{{photo.alt}}
+				<br>{{photo.createdAt}}
+              </td>
+              <td valign="middle">
+				<div id="chat{{photo.id}}"></div>
+                <div id="url">
+                  <a href="{{photo.url}}" target="_blank">{{photo.url}}</a>
+                </div>
+              </td>
+              <td valign="middle">
+                {{photo.alt}}
+              </td>
+          </tr>
+      </table>
+  </div>
 <script type="text/javascript">
-<!--
+/**
+ * document.getElementById().innerHTML で、メッセージ出力。
+ */
+function renderGptMessage(data, index) {
+	const objId = 	'chat' + index;
+	document.getElementById(objId).innerHTML=data;
+}
+
 function logout() {
-	document.frm.method = 'POST';
-	document.frm.action='SignOut';
-	document.frm.submit();
-	return;
+  document.frm.method = 'POST';
+  document.frm.action='SignOut';
+  document.frm.submit();
+  return;
 }
 
 function photo() {
-	document.frm.method = 'POST';
-	document.frm.action='Photo';
-	document.frm.submit();
-	return;
+  document.frm.method = 'POST';
+  document.frm.action='Photo';
+  document.frm.submit();
+  return;
 }
--->
+
 </script>
-	<div align="center">
-		<form name="frm" method="post" action="SignIn">
-			<input type="hidden" name="id" th:value="${id}" />
-			<input type="hidden" name="password" th:value="${password}" />
-			<input type="button" class="btn btn-primary btn-sm" onClick='photo();' value="Photo" /><br><br>
-			<input type="button" class="btn btn-primary btn-sm" onClick='logout();' value="logout" />
-		</form>	
-	</div>
+  <div align="center">
+    <form name="frm" method="post" action="SignIn">
+      <input type="hidden" name="id" th:value="${id}" />
+      <input type="hidden" name="password" th:value="${password}" />
+      <input type="button" class="btn btn-primary btn-sm" onClick='photo();' value="Photo" /><br><br>
+      <input type="button" class="btn btn-primary btn-sm" onClick='logout();' value="logout" />
+    </form>
+  </div>
+  
+        </div>
 </body>
 </html>

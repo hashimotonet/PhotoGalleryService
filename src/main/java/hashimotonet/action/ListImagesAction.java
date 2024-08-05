@@ -173,36 +173,14 @@ public final class ListImagesAction {
         /*
         PrintWriter out = response.getWriter();
         */
-        String output = null;//new JsonNode().encode(urls, true);
+        String output = null;
         ObjectMapper mapper = new ObjectMapper();
         output = mapper.writeValueAsString(urls);
         
-        log.trace(output);
+        log.info(output);
         
         return output;
         
-        /**
-
-        if (smartPhone) {
-            out.println(output);
-        } else {
-        	String path = "/WEB-INF/display.jsp";
-        	
-            //request.setCharacterEncoding("UTF-8");
-        	response.setContentType("text/json; charset=UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            request.setAttribute("images", output);
-            request.getServletContext().getRequestDispatcher(path).forward(request, response);
-        }
-
-        
-        // 処理は成功したので、処理結果を真とする。
-        result = true;
-
-        // 処理結果を返却する。
-        return result;
-        
-        */
     }
 
 
@@ -232,6 +210,8 @@ public final class ListImagesAction {
       }
       
       for(URLHolder file : files) {
+    	  bean.setId(file.getId());
+    	  
           // 画像イメージのURLを生成する。
           String url = null;
           if (https) {
@@ -249,16 +229,19 @@ public final class ListImagesAction {
           // URLHolderにURLをセット。
           bean.setUrl(url);
 
-          // サムネイルイメージのURLを生成する。
-          String thumb = "http://"
-                  + req.getServerName()
-                  + ":" + req.getServerPort()
-                  + sc.getContextPath()
-                  + file.getThumbnail();
-          log.debug("thumb = " + thumb);
-
-          // URLHolderにサムネイルURLをセット。
-          bean.setThumbnail(thumb);
+//          // サムネイルイメージのURLを生成する。
+//          String thumb = "http://"
+//                  + req.getServerName()
+//                  + ":" + req.getServerPort()
+//                  + sc.getContextPath()
+//                  + file.getThumbnail();
+//          log.debug("thumb = " + thumb);
+//
+//          // URLHolderにサムネイルURLをセット。
+//          bean.setThumbnail(thumb);
+          
+          // add.
+          bean.setCreatedAt(file.getCreatedAt());
           
           // altテキストをセット。
           bean.setAlt(file.getAlt());

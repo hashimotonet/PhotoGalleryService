@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,10 @@ public class PhotoDao extends AbstractBaseDao {
     private final String insertSQL = "insert into photo (identity, authority, data, alt) values (?, ?, ?, ?)";
 
     private final String selectMaxSQL = "select max(id) from photo";
+    
+    private final String updateSQL = "update photo (chat = ?) where id = ?";
+    
+    private final String selectChatSQL = "select chat from photo where id = ?";
 
     /**
      * ロガー
@@ -51,7 +56,125 @@ public class PhotoDao extends AbstractBaseDao {
         // 親クラスのコンストラクタ呼び出し
         super();
     }
+    
+    /**
+     * ChatGPT接続履歴より、メッセージを取得する。
+     * 
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public String getChatMessage(String id) throws SQLException {
 
+    	String message = "";
+    	
+    	// JDBC接続を取得
+        Connection conn = super.getConnection();
+
+        // ステートメントを作成
+        PreparedStatement pStmt = conn.prepareStatement(selectChatSQL);
+
+        // DMLのプレースホルダにIDをセット
+        pStmt.setString(1, id);
+
+        // 検索実行
+        ResultSet rs = pStmt.executeQuery();
+
+        // 検索結果があれば取得する
+        if(rs.next()) {
+        	message = rs.getString("chat");
+        }
+        
+        rs.close();
+        pStmt.close();
+        conn.close();
+        
+        return message;
+    }
+    
+    /**
+     * 取得したChatGPTからの応答メッセージをPhoto表にストア
+     * 
+     * @param chat
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public boolean updateChatMessage(String chat, String id) throws SQLException {
+    	boolean result = false;
+    	
+        // JDBC接続
+        Connection conn = null;
+
+        // プレースホルダ付きSQL文対応のステートメント
+        PreparedStatement stmt = null;
+        
+        if (chat == null || chat.equals("")) {
+        	return false;
+        }
+
+        // JDBC接続を取得
+        conn = super.getConnection();
+
+        // ステートメントを作成
+        stmt = conn.prepareStatement(updateSQL);
+        
+        // DMLのプレースホルダにパラメータをセット
+        stmt.setString(1,chat);
+        stmt.setString(2, id);
+        
+        int updated = stmt.executeUpdate(); 
+        
+        stmt.close();
+        conn.close();
+        
+        if (updated > 0) {
+        	result = true;
+        }
+        
+    	return result;
+    }
+
+    /**
+     * 該当カラムのChatGPTメッセージの存在有無を確認する。
+     * 
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public boolean chatExists(String id) throws SQLException {
+    	boolean result = false;
+    	int index = Integer.valueOf(id).intValue();
+
+        // JDBC接続
+        Connection conn = null;
+
+        // プレースホルダ付きSQL文対応のステートメント
+        PreparedStatement stmt = null;
+
+        // JDBC接続を取得
+        conn = super.getConnection();
+
+        // ステートメントを作成
+        stmt = conn.prepareStatement(selectChatSQL);
+        
+        // DMLのプレースホルダにパラメータをセット
+        stmt.setInt(1,index);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+        if (rs.next()) {
+        	result = true;
+        }
+        
+        rs.close();
+        stmt.close();
+        conn.close();
+        
+        return result;
+        
+    }
+    
     /**
      * データ挿入メソッド
      *
@@ -108,7 +231,7 @@ public class PhotoDao extends AbstractBaseDao {
         Photo photo = new Photo();
 
         // DMLを宣言
-        String sql = "select data, alt,id from photo where identity=? order by id";
+        String sql = "select data, alt, id, created_at from photo where identity=? order by id";
 
         // JDBC接続を取得
         Connection conn = super.getConnection();
@@ -127,10 +250,12 @@ public class PhotoDao extends AbstractBaseDao {
             // バイナリをバイト配列に取得する
             byte[] data = rs.getBytes("data");
             String alt = rs.getString("alt");          // 結果のリストに取得したデータを追記
-            int ind = rs.getInt("id");          
+            int ind = rs.getInt("id");
+            String createdAt = DateFormat.getDateInstance().format(rs.getDate("created_at"));
             photo.setData(data);
             photo.setAlt(alt);
             photo.setId(ind);
+            photo.setCreatedAt(createdAt);
             
             result.add(photo);
             

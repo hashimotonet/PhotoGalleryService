@@ -3,6 +3,8 @@
  */
 package hashimotonet.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -66,6 +68,15 @@ public class PhotoEntity implements Example<String> {
      */
 	@Column(name = "alt")
     private String alt;
+	
+	/**
+	 * Chat-GPTによるメッセージ
+	 */
+	@Column(name = "chat")
+	private String chat;
+	
+	@Column(name = "created_at")
+	private Date createdAt;
 
     /**
      * デフォルトコンストラクタ
