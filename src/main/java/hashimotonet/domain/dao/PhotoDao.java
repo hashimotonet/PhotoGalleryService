@@ -33,7 +33,7 @@ public class PhotoDao extends AbstractBaseDao {
 
     private final String selectMaxSQL = "select max(id) from photo";
     
-    private final String updateSQL = "update photo (chat = ?) where id = ?";
+    private final String updateSQL = "update photo set chat=? where id=?";
     
     private final String selectChatSQL = "select chat from photo where id = ?";
 
@@ -121,12 +121,11 @@ public class PhotoDao extends AbstractBaseDao {
         
         // DMLのプレースホルダにパラメータをセット
         stmt.setString(1,chat);
-        stmt.setString(2, id);
+        stmt.setInt(2, Integer.valueOf(id).intValue());
         
         int updated = stmt.executeUpdate(); 
         
         stmt.close();
-        conn.close();
         
         if (updated > 0) {
         	result = true;

@@ -36,8 +36,8 @@ public class ExecPythonProcessor {
             // ProcessBuilderを使用して環境変数を設定
             ProcessBuilder processBuilder = new ProcessBuilder("python3.9", "/opt/PhotoGallery/python3.9.18/image_analysis.py", url);
             Map<String, String> env = processBuilder.environment();
-            // OPENAI_API_KEY は秘匿情報のため、
-            env.put("キー名", "APIキー値"); 
+            // OPENAI_API_KEY は秘匿情報のため、push 時に削除
+            env.put("キー名", "キー値");
 
             // プロセスを開始
             Process process = processBuilder.start();
